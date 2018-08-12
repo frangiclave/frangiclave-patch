@@ -50,15 +50,12 @@
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e">
       <HintPath>..\MonoMod\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e">
       <HintPath>..\MonoMod\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e">
       <HintPath>..\MonoMod\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e">
       <HintPath>..\MonoMod\Mono.Cecil.Rocks.dll</HintPath>
@@ -68,13 +65,11 @@
       <HintPath>..\CultistSimulator\Mono.Security.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MonoMod, Version=18.6.0.25428, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="MonoMod, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\MonoMod\MonoMod.exe</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="MonoMod.Utils, Version=18.6.0.25427, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="MonoMod.Utils, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\MonoMod\MonoMod.Utils.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
       <HintPath>..\CultistSimulator\mscorlib.dll</HintPath>
