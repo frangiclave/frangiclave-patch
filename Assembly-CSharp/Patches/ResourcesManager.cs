@@ -5,6 +5,8 @@ using MonoMod;
 using Noon;
 using UnityEngine;
 
+#pragma warning disable CS0626
+
 namespace Frangiclave.Patches
 {
     [MonoModPatch("global::ResourcesManager")]

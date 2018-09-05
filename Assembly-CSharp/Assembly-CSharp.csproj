@@ -49,10 +49,6 @@
       <HintPath>..\MonoMod\Mono.Cecil.Rocks.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-      <HintPath>..\CultistSimulator\Mono.Security.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="MonoMod, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\MonoMod\MonoMod.exe</HintPath>
     </Reference>
@@ -102,11 +98,4 @@
     <Compile Include="Texture2DExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
 </Project>
