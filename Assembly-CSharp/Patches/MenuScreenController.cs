@@ -1,4 +1,5 @@
-﻿using Assets.CS.TabletopUI;
+﻿using System.Diagnostics.CodeAnalysis;
+using Assets.CS.TabletopUI;
 using Frangiclave.Modding;
 using MonoMod;
 using TMPro;
@@ -8,16 +9,19 @@ using TMPro;
 namespace Frangiclave.Patches
 {
     [MonoModPatch("global::MenuScreenController")]
-    public class MenuScreenController
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [SuppressMessage("ReSharper", "UnassignedField.Global")]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    public class MenuScreenController : global::MenuScreenController
     {
         [MonoModIgnore]
-        public TextMeshProUGUI VersionNumber;
-        
+        public new TextMeshProUGUI VersionNumber;
+
         [MonoModIgnore]
-        public MenuSubtitle Subtitle;
-        
+        public new MenuSubtitle Subtitle;
+
         private extern void orig_InitialiseServices();
-        
+
         private void InitialiseServices()
         {
             // Load all mods and add the manager to the registry for easier access
@@ -25,7 +29,6 @@ namespace Frangiclave.Patches
             var modManager = new ModManager();
             modManager.LoadAll();
             registry.Register(modManager);
-            
             orig_InitialiseServices();
         }
 
@@ -34,7 +37,7 @@ namespace Frangiclave.Patches
         private void UpdateAndShowMenu()
         {
             orig_UpdateAndShowMenu();
-            
+
             // Change the version number and subtitle to indicate the game has been modded
             VersionNumber.text += " [M]";
             Subtitle.SetText(Subtitle.SubtitleText.text + " [M]");

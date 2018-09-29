@@ -15,13 +15,14 @@ namespace Frangiclave.Modding
         private readonly HashSet<string> _entityCategories = new HashSet<string>
         {
             "decks",
-            "elements", 
-            "endings", 
-            "legacies", 
-            "recipes", 
+            "elements",
+            "endings",
+            "legacies",
+            "maps",
+            "recipes",
             "verbs"
         };
-        
+
         private readonly HashSet<string> _imagesDirectories = new HashSet<string>
         {
             "cardBacks/",
@@ -30,13 +31,15 @@ namespace Frangiclave.Modding
             "endingArt/",
             "icons40/aspects/",
             "icons100/legacies/",
-            "icons100/verbs/"
+            "icons100/verbs/",
+            "maps/",
+            "maps/portals/"
         };
 
         private readonly string _modsFolder;
-        
+
         private readonly Dictionary<string, Mod> _mods;
-        
+
         public ModManager()
         {
             _mods = new Dictionary<string, Mod>();
@@ -47,14 +50,14 @@ namespace Frangiclave.Modding
         {
             Logging.Info("Loading all mods");
             _mods.Clear();
-            
+
             // Check if the mods folder exists
             if (!Directory.Exists(_modsFolder))
             {
                 Logging.Warn("Mods folder not found, no mods loaded");
                 return;
             }
-            
+
             // Load the mod data from the file system
             foreach (var modFolder in Directory.GetDirectories(_modsFolder))
             {
@@ -65,7 +68,7 @@ namespace Frangiclave.Modding
                     continue;
                 }
                 Logging.Info("Loading mod " + modId);
-                
+
                 // Find the mod's manifest and load its data
                 var manifestPath = Path.Combine(modFolder, ModManifestFileName);
                 if (!File.Exists(manifestPath))
@@ -92,7 +95,7 @@ namespace Frangiclave.Modding
                     Logging.Error("Encountered errors in manifest, skipping mod");
                     continue;
                 }
-                
+
                 // Collect the mod's content files
                 // If an error occurs in the process, discard the mod
                 if (!LoadContentDirectory(mod, Path.Combine(modFolder, "content")))
@@ -100,7 +103,7 @@ namespace Frangiclave.Modding
                     Logging.Error("Encountered errors in content, skipping mod");
                     continue;
                 }
-                
+
                 // Collect the mod's images
                 // If an error occurs in the process, discard the mod
                 if (!LoadAllImagesDirectory(mod, Path.Combine(modFolder, "images")))
@@ -108,13 +111,13 @@ namespace Frangiclave.Modding
                     Logging.Error("Encountered errors in images, skipping mod");
                     continue;
                 }
-                
+
                 // Add the mod to the collection
                 Logging.Info($"Loaded mod '{modId}'");
                 _mods.Add(modId, mod);
             }
             Logging.Info("Loaded all mods");
-            
+
             // Check the dependencies to see if there are any missing or invalid ones
             foreach (var mod in _mods)
             {
@@ -159,14 +162,14 @@ namespace Frangiclave.Modding
             }
         }
 
-        public List<Hashtable> GetContentForCategory(string category)
+        public IEnumerable<Hashtable> GetContentForCategory(string category)
         {
             var categoryContent = new List<Hashtable>();
             foreach (var mod in _mods)
             {
                 if (mod.Value.Contents.ContainsKey(category))
                 {
-                    categoryContent.AddRange(mod.Value.Contents[category]);                    
+                    categoryContent.AddRange(mod.Value.Contents[category]);
                 }
             }
 
@@ -185,7 +188,7 @@ namespace Frangiclave.Modding
 
             return null;
         }
-        
+
         private bool LoadContentDirectory(Mod mod, string contentDirectoryPath)
         {
             // Search the directory for content files
@@ -228,7 +231,7 @@ namespace Frangiclave.Modding
         }
 
         private static bool LoadImagesDirectory(Mod mod, string imagesDirectoryPath, string imagesSubdirectory)
-        {            
+        {
             // Check if the directory exists, otherwise don't try looking for images in it
             var imagesSubdirectoryPath = Path.Combine(imagesDirectoryPath, imagesSubdirectory);
             if (!Directory.Exists(imagesSubdirectoryPath))
@@ -243,7 +246,7 @@ namespace Frangiclave.Modding
                 var fileResourceName = imagesSubdirectory + Path.GetFileNameWithoutExtension(imagePath);
                 Logging.Info($"Loading image '{fileResourceName}'");
                 var fileData = File.ReadAllBytes(imagePath);
-                
+
                 // Try to load the image data into a sprite
                 Sprite sprite;
                 try

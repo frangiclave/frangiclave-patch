@@ -10,19 +10,19 @@ namespace Frangiclave.Modding
     public class Mod
     {
         public string Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public string Author { get; set; }
-        
+
         public Version Version { get; set; }
-        
+
         public string Description { get; set; }
-        
+
         public string DescriptionLong { get; set; }
-        
+
         public List<Dependency> Dependencies { get; set; }
-        
+
         public Dictionary<string, List<Hashtable>> Contents { get; set; }
 
         public Dictionary<string, Sprite> Images { get; set; }
@@ -31,11 +31,11 @@ namespace Frangiclave.Modding
 
         public Mod(
             string id,
-            string name = null, 
-            string author = null, 
-            Version version = null, 
-            string description = null, 
-            string descriptionLong = null, 
+            string name = null,
+            string author = null,
+            Version version = null,
+            string description = null,
+            string descriptionLong = null,
             List<Dependency> dependencies = null,
             Dictionary<string, List<Hashtable>> contents = null,
             Dictionary<string, Sprite> images = null)
@@ -63,11 +63,11 @@ namespace Frangiclave.Modding
             }
             catch
             {
-                errors.Add($"Invalid format for 'version'");
+                errors.Add("Invalid format for 'version'");
             }
             Description = manifest.GetStringOrLogError("description", errors);
             DescriptionLong = manifest.GetString("description");
-            
+
             // Validate the dependencies
             var dependenciesData = manifest.GetArrayList("dependencies");
             if (dependenciesData != null)
@@ -86,9 +86,9 @@ namespace Frangiclave.Modding
                     {
                         var invalidDependency = false;
                         var dependency = new Dependency {ModId = match.Groups[1].Value};
-                        
+
                         // Validate the version, if specified
-                        if (match.Groups.Count > 2 
+                        if (match.Groups.Count > 2
                             && match.Groups[2].Value.Length > 0 && match.Groups[3].Value.Length > 0)
                         {
                             switch (match.Groups[2].Value)
@@ -128,7 +128,7 @@ namespace Frangiclave.Modding
 
                         if (!invalidDependency)
                         {
-                            Dependencies.Add(dependency);                                                    
+                            Dependencies.Add(dependency);
                         }
                     }
                     else
