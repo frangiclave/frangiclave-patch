@@ -191,6 +191,13 @@ namespace Frangiclave.Modding
 
         private bool LoadContentDirectory(Mod mod, string contentDirectoryPath)
         {
+            // Check if there is a `content` directory first, but don't require one for the mod to be valid
+            if (!Directory.Exists(contentDirectoryPath))
+            {
+                Logging.Warn("No content directory found; content files must be placed in a 'content' subdirectory");
+                return true;
+            }
+
             // Search the directory for content files
             foreach (var contentFileName in Directory.GetFiles(contentDirectoryPath, "*.json"))
             {
