@@ -102,6 +102,7 @@
     <Compile Include="Patches\Assets\TabletopUi\SituationController.cs" />
     <Compile Include="Patches\Compendium.cs" />
     <Compile Include="Patches\ContentImporter.cs" />
+    <Compile Include="Patches\DebugTools.cs" />
     <Compile Include="Patches\MenuScreenController.cs" />
     <Compile Include="Patches\PortalEffect.cs" />
     <Compile Include="Patches\Recipe.cs" />
