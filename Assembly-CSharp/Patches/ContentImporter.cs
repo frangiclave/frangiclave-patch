@@ -102,6 +102,10 @@ namespace Frangiclave.Patches
                     newItem.AddHashtable(parents[parent], false);
                 }
                 newItem.AddHashtable(moddedItem, true);
+
+                // Run any property operations that are present
+                ProcessPropertyOperations(newItem);
+
                 if (originalItem != null)
                 {
                     originalItem.Clear();
@@ -113,6 +117,97 @@ namespace Frangiclave.Patches
                 }
             }
             return items;
+        }
+
+        private static void ProcessPropertyOperations(Hashtable item)
+        {
+            var itemId = item.GetString("id");
+            var keys = new ArrayList(item.Keys);
+            foreach (string property in keys)
+            {
+                var propertyWithOperation = property.Split('$');
+                if (propertyWithOperation.Length < 2)
+                {
+                    continue;
+                }
+                if (propertyWithOperation.Length > 2)
+                {
+                    Logging.Warn($"Property '{property}' in '{itemId}' contains too many '$', skipping");
+                    continue;
+                }
+
+                var originalProperty = propertyWithOperation[0];
+                if (!item.ContainsKey(originalProperty))
+                {
+                    Logging.Warn($"Unknown property '{originalProperty}' for property '{property}' in '{itemId}', skipping");
+                    continue;
+                }
+                var operation = propertyWithOperation[1];
+                switch (operation)
+                {
+                    // append: append values to a list
+                    // prepend: prepend values to a list
+                    case "append":
+                    case "prepend":
+                    {
+                        var value = item.GetArrayList(originalProperty);
+                        var newValue = item.GetArrayList(property);
+                        if (value == null || newValue == null)
+                        {
+                            Logging.Warn(
+                                $"Cannot apply '{operation}' to '{originalProperty}' in '{itemId}': invalid type, must be a list");
+                            continue;
+                        }
+
+                        if (operation == "append")
+                        {
+                            value.AddRange(newValue);
+                        }
+                        else
+                        {
+                            value.InsertRange(0, newValue);
+                        }
+
+                        break;
+                    }
+
+                    // plus: Adds a numerical value to another.
+                    // minus: Subtracts a numerical value from another.
+                    case "plus":
+                    case "minus":
+                    {
+                        var value = item.GetFloat(originalProperty);
+                        var newValue = item.GetFloat(property);
+
+                        var modifier = (operation == "plus" ? 1 : -1);
+                        item[originalProperty] = value + newValue * modifier;
+                        break;
+                    }
+
+                    // extend: add or replace keys in a dictionary
+                    case "extend":
+                    {
+                        var value = item.GetHashtable(originalProperty);
+                        var newValue = item.GetHashtable(property);
+                        if (value == null || newValue == null)
+                        {
+                            Logging.Warn(
+                                $"Cannot apply '{operation}' to '{originalProperty}' in '{itemId}': invalid type, must be a dictionary");
+                            continue;
+                        }
+
+                        value.AddHashtable(newValue, true);
+
+                        break;
+                    }
+                    default:
+                        Logging.Warn($"Unknown operation '{operation}' for property '{property}' in '{itemId}', skipping");
+                        continue;
+                }
+
+                // Remove the property once it has been processed, to avoid warnings from the content importer
+                item.Remove(property);
+            }
         }
     }
 }
